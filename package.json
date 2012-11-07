@@ -1,0 +1,27 @@
+{
+  "name": "flod-webservers",
+  "description": "test files for use with flod",
+  "homepage": "http://hapijs.com",
+  "version": "0.0.1",
+  "author": "Van Nguyen <thegoleffect@gmail.com>",
+  "repository": "git://github.com/thegoleffect/flod-webservers",
+  "keywords": [],
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "dependencies": {
+    "director": "1.1.7",
+    "express": "3.0.1",
+    "hapi": "0.8.3",
+    "restify": "1.4.4"
+  },
+  "devDependencies": {
+  },
+  "scripts": {},
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/walmartlabs/hapi/raw/master/LICENSE"
+    }
+  ]
+}
