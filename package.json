@@ -2,7 +2,7 @@
   "name": "flod-webservers",
   "description": "test files for use with flod",
   "homepage": "http://hapijs.com",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "author": "Van Nguyen <thegoleffect@gmail.com>",
   "repository": "git://github.com/thegoleffect/flod-webservers",
   "keywords": [],
