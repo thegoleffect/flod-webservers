@@ -1,0 +1,96 @@
+#!/usr/bin/env coffee
+doc = """
+Usage:
+  update [<module>...]
+
+Options:
+  -h, --help                    show this help message
+"""
+
+_ = require('underscore')
+docopt = require('docopt').docopt
+opts = docopt(doc, {help: true, version: require(__dirname + "/../package.json").version})
+
+console.log(opts)
+
+_default = {
+  '<module>': ["hapi", "express", "director", "restify"]
+}
+
+options = _.extend({}, _default, opts)
+
+async = require('async')
+fs = require('fs')
+path = require('path')
+{exec, spawn} = require('child_process')
+
+parseNPMVersions = (item, npmOutput) ->
+  pattern = /versions\:\s+\[\s+([\'0-9a-z\-\.\s\,]+)\s+\][,]/
+  x = npmOutput.match(pattern)
+  if x == null
+    console.log(item, npmOutput)
+  
+  output = "[" + x[1].replace(/\s+/g, " ").replace(/\'/g, '\"') + "]"
+  return JSON.parse(output)
+
+getVersionInfo = (item, callback) ->
+  npm = spawn('npm', ["view", item])
+  buffer = []
+  npm.stdout.on('data', (chunk) ->
+    buffer.push(chunk)
+  )
+  npm.on('exit', () ->
+    str = buffer.join("")
+    callback(null, parseNPMVersions(item, str))
+  )
+
+getVersions = (options, callback) ->
+  versions = {}
+  
+  async.map(options['<module>'], getVersionInfo, (err, results) ->
+    throw err if err
+    
+    
+    versions = {}
+    for vers,i in results
+      versions[options['<module>'][i]] = vers
+    
+    callback(err, versions)
+  )
+
+createFolderIfNotExists = (p) ->
+  try
+    stats = fs.lstatSync(p)
+    if not stats.isDirectory()
+      fs.mkdirSync(p)
+  catch e
+    fs.mkdirSync(p)
+
+createFolders = (versions, callback) ->
+  srcpath = path.join(__dirname, '../old-lib/')
+  filesToCopy = ['helloworld.js', 'package.json']
+  
+  for mod,i in options['<module>']
+    dirpath = path.join(__dirname, '../lib/', mod)
+    
+    createFolderIfNotExists(dirpath)
+    
+    for v,i in versions[mod]
+      folderpath = path.join(dirpath, v)
+      
+      createFolderIfNotExists(folderpath)
+      
+      for f in filesToCopy
+        contents = fs.readFileSync(path.join(srcpath, mod, f)).toString()
+        fs.writeFileSync(path.join(folderpath, f))
+   
+   callback(null)
+
+getVersions(options, (err, versions) ->
+  throw err if err
+  
+  # console.log(versions)
+  createFolders(versions, (err) ->
+    throw err if err
+  )
+)
