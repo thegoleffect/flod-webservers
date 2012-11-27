@@ -10,7 +10,6 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "director": "1.1.8",
     "kali": "0.0.1"
   },
   "devDependencies": {},

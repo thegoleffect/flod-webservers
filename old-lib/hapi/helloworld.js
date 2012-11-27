@@ -1,7 +1,7 @@
 var Kali = require('kali').Local;
 var kali = new Kali({
   server: "hapi",
-  version: "0.8.3",
+  version: require(__dirname + '/package.json').dependencies["hapi"],
   file: "helloworld"
 });
 

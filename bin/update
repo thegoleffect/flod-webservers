@@ -70,6 +70,8 @@ createFolders = (versions, callback) ->
   srcpath = path.join(__dirname, '../old-lib/')
   filesToCopy = ['helloworld.js', 'package.json']
   
+  toVerify = []
+  
   for mod,i in options['<module>']
     dirpath = path.join(__dirname, '../lib/', mod)
     
@@ -82,15 +84,80 @@ createFolders = (versions, callback) ->
       
       for f in filesToCopy
         contents = fs.readFileSync(path.join(srcpath, mod, f)).toString()
-        fs.writeFileSync(path.join(folderpath, f))
+        fs.writeFileSync(path.join(folderpath, f), contents)
+      toVerify.push(folderpath)
    
-   callback(null)
+   callback(null, toVerify)
+
+installVersion = (directory, callback) ->
+  shorted = false
+  cb = (err) ->
+    return null if shorted == true
+    shorted = true
+    callback(err || null)
+  
+  serverVersion = path.basename(directory)
+  serverName = path.basename(path.dirname(directory))
+  console.log("npm installing " + serverName + '@' + serverVersion)
+  npm = spawn('npm', ['install', '--loglevel', 'warn', '--save', serverName + '@' + serverVersion], {cwd: directory})
+  buffer = []
+  npm.stderr.on('data', (chunk) ->
+    buffer.push(chunk)
+  )
+  npm.stderr.on('end', () ->
+    console.log(buffer.join(""))
+    # cb(buffer.join(""))
+  )
+  npm.on('exit', () ->
+    cb(null)
+  )
+
+install = (directory, callback) ->
+  shorted = false
+  cb = (err) ->
+    return null if shorted == true
+    shorted = true
+    callback(err)
+  
+  npm = spawn('npm', ['install', '--loglevel', 'warn'], {cwd: directory})
+  buffer = []
+  npm.stderr.on('data', (chunk) ->
+    buffer.push(chunk)
+  )
+  npm.stderr.on('end', () ->
+    console.log(buffer.join(""))
+    # cb(buffer.join(""))
+  )
+  npm.on('exit', () ->
+    cb(null)
+  )
+
+verifyServers = (toVerify, filename, callback) ->
+  verify = (dir, callback) ->
+    installVersion(dir, (err) ->
+      install(dir, (err) ->
+        throw err if err
+        
+        console.log(dir, 'installed')
+        callback(err)
+      )
+    )
+  
+  async.forEachSeries(toVerify, verify, callback)
+  # for p in toVerify
+  #   console.log(p)
 
 getVersions(options, (err, versions) ->
   throw err if err
   
   # console.log(versions)
-  createFolders(versions, (err) ->
+  createFolders(versions, (err, toVerify) ->
     throw err if err
+    
+    verifyServers(toVerify, 'helloworld.js', (err) ->
+      throw err if err
+      
+      
+    )
   )
 )

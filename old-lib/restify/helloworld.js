@@ -1,7 +1,7 @@
 var Kali = require('kali').Local;
 var kali = new Kali({
   server: "restify",
-  version: "1.4.4",
+  version: require(__dirname + '/package.json').dependencies["restify"],
   file: "helloworld"
 });
 

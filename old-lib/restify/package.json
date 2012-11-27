@@ -10,7 +10,6 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "restify": "1.4.4",
     "kali": "0.0.1"
   },
   "devDependencies": {},

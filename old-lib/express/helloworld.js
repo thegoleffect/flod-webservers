@@ -1,7 +1,7 @@
 var Kali = require('kali').Local;
 var kali = new Kali({
   server: "express",
-  version: "3.0.1",
+  version: require(__dirname + '/package.json').dependencies["express"],
   file: "helloworld"
 });
 
