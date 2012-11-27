@@ -2,15 +2,14 @@
   "name": "flod-webservers",
   "description": "test files for use with flod",
   "homepage": "http://hapijs.com",
-  "version": "0.0.1",
+  "version": "0.0.1-1",
   "author": "Van Nguyen <thegoleffect@gmail.com>",
   "repository": "git://github.com/thegoleffect/flod-webservers",
   "keywords": [],
   "engines": {
     "node": ">=0.8.0"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "async": "~0.1.22",
     "coffee-script": "*",
