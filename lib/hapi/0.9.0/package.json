@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "hapi": "0.9.0",
-    "kali": ">= 0.0.1"
+    "kali": ">= 0.0.2"
   },
   "devDependencies": {},
   "scripts": {},
