@@ -1,21 +1,19 @@
 {
-  "name": "flod-webservers",
+  "name": "flod-example-hapi-helloworld",
   "description": "test files for use with flod",
   "homepage": "http://hapijs.com",
-  "version": "0.0.3-2",
+  "version": "0.0.1",
   "author": "Van Nguyen <thegoleffect@gmail.com>",
-  "repository": "git://github.com/thegoleffect/flod-webservers",
+  "repository": "git://github.com/thegoleffect/flod",
   "keywords": [],
   "engines": {
     "node": ">=0.8.0"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "async": "~0.1.22",
-    "coffee-script": "*",
-    "docopt": ">= 0.4.0",
-    "underscore": "~1.4.2"
+  "dependencies": {
+    "hapi": "0.8.4",
+    "kali": ">= 0.0.2"
   },
+  "devDependencies": {},
   "scripts": {},
   "licenses": [
     {
